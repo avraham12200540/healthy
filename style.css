@@ -1,8 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
 body {
     font-family: 'Varela Round', sans-serif;
     direction: rtl;
     background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
-    padding: 30px;
+    padding: 40px;
     text-align: center;
     min-height: 100vh;
     display: flex;
@@ -12,19 +14,19 @@ body {
 }
 
 h1 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
+    font-size: 3em; /* גדול וברור אבל לא מוגזם */
+    margin-bottom: 30px;
     color: #4a148c;
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
 }
 
 select, button {
-    margin: 12px;
-    padding: 12px 20px;
-    font-size: 18px;
+    margin: 15px;
+    padding: 15px 25px;
+    font-size: 20px; /* יותר גדול מקריא ונעים */
     border: none;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
     transition: all 0.3s ease;
 }
 
@@ -48,5 +50,3 @@ button:hover {
 button:active {
     transform: scale(0.98);
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
