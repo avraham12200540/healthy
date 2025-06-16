@@ -1,47 +1,39 @@
 <!DOCTYPE html>
 <html lang="he">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>מבצע הבריאות של משפחת גלסר</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div id="totalScore">ניקוד כללי: 0</div>
-    <div id="userScore"></div>
+    
     <div>
         <label>בחר משתמש:</label>
         <select id="userSelect"></select>
     </div>
+    
     <div>
         <label>בחר פעילות:</label>
         <select id="activitySelect"></select>
     </div>
+    
     <div>
         <label>בחר אפשרות:</label>
         <select id="optionSelect"></select>
     </div>
+    
     <button onclick="saveData()">שמור פעילות</button>
+    
+    <h3>ניקוד משתמש נבחר:</h3>
+    <div id="userScore"></div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <h3>רשימת פעילויות משתמש נבחר:</h3>
+    <ul id="userActivitiesList"></ul>
 
-    <script>
-      // קונפיגורציה של Firebase
-      const firebaseConfig = {
-        apiKey: "AIzaSyB8B7RW9JmsQfxieR-arwG3alPrW585jRo",
-        authDomain: "health-project-68bb1.firebaseapp.com",
-        databaseURL: "https://health-project-68bb1-default-rtdb.firebaseio.com",
-        projectId: "health-project-68bb1",
-        storageBucket: "health-project-68bb1.appspot.com",
-        messagingSenderId: "1008505100763",
-        appId: "1:1008505100763:web:1e8878759bc68916176ffe"
-      };
-
-      // אתחול Firebase
-      firebase.initializeApp(firebaseConfig);
-      const database = firebase.database();
-    </script>
+    <h3>גרף ניקוד כל המשתמשים:</h3>
+    <canvas id="scoreChart" width="400" height="200"></canvas>
 
     <script src="script.js"></script>
 </body>
