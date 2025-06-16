@@ -12,7 +12,7 @@ body {
     justify-content: center;
     color: #333;
     font-size: 26px;
-    overflow-x: hidden; /* למניעת גלילה מיותרת */
+    overflow-x: hidden;
     animation: fadeInBody 1s ease forwards;
 }
 
@@ -28,6 +28,12 @@ h1 {
     text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
     position: relative;
     animation: slideIn 1s ease-out forwards;
+    transition: transform 0.3s ease, text-shadow 0.3s ease;
+}
+
+h1:hover {
+    transform: scale(1.05) rotate(-1deg);
+    text-shadow: 4px 4px 10px rgba(0,0,0,0.3);
 }
 
 @keyframes slideIn {
@@ -40,6 +46,12 @@ h2, h3, p, label, span {
     opacity: 0;
     animation: fadeInUp 1s ease forwards;
     animation-delay: 0.5s;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+h2:hover, h3:hover, p:hover, label:hover, span:hover {
+    transform: scale(1.04);
+    color: #0288d1;
 }
 
 @keyframes fadeInUp {
@@ -68,6 +80,12 @@ select, button {
 select {
     background: #ffffffcc;
     color: #333;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+select:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
 button {
