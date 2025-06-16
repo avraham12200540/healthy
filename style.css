@@ -1,0 +1,13 @@
+body {
+    font-family: Arial, sans-serif;
+    direction: rtl;
+    background: linear-gradient(to bottom, #d0eaff, #a0f0d0);
+    padding: 20px;
+    text-align: center;
+}
+
+select, button {
+    margin: 10px;
+    padding: 5px;
+    font-size: 16px;
+}
