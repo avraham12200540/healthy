@@ -19,8 +19,6 @@ const activities = {
     'עזרה בבית': {'5 דקות': 1, '10 דקות': 2, '20 דקות': 5}
 };
 
-let scores = JSON.parse(localStorage.getItem('healthScores')) || {};
-
 const userSelect = document.getElementById('userSelect');
 const activitySelect = document.getElementById('activitySelect');
 const optionSelect = document.getElementById('optionSelect');
@@ -41,7 +39,6 @@ Object.keys(activities).forEach(activity => {
     activitySelect.appendChild(opt);
 });
 
-// אתחול אפשרויות optionSelect בעת טעינת הדף
 activitySelect.value = Object.keys(activities)[0];
 activitySelect.dispatchEvent(new Event('change'));
 
@@ -67,20 +64,41 @@ function saveData() {
     }
 
     const points = activities[activity][option];
-    scores[user] = (scores[user] || 0) + points;
-    scores['total'] = (scores['total'] || 0) + points;
 
-    localStorage.setItem('healthScores', JSON.stringify(scores));
-    updateDisplay();
+    // קרא את הניקוד הקיים מהמסד
+    firebase.database().ref('scores/' + user).once('value').then(snapshot => {
+        let currentUserScore = snapshot.val() || 0;
+        let newUserScore = currentUserScore + points;
+
+        // שמור ניקוד מעודכן למשתמש
+        firebase.database().ref('scores/' + user).set(newUserScore);
+
+        // עדכון ניקוד כללי
+        firebase.database().ref('scores/total').once('value').then(totalSnap => {
+            let currentTotal = totalSnap.val() || 0;
+            let newTotal = currentTotal + points;
+            firebase.database().ref('scores/total').set(newTotal);
+
+            // עדכון התצוגה
+            updateDisplay();
+        });
+    });
 }
 
 function updateDisplay() {
-    totalScoreDiv.textContent = 'ניקוד כללי: ' + (scores['total'] || 0);
+    firebase.database().ref('scores/total').once('value').then(snapshot => {
+        totalScoreDiv.textContent = 'ניקוד כללי: ' + (snapshot.val() || 0);
+    });
+
     const user = userSelect.value;
-    userScoreDiv.textContent = user ? `${user} עשה: ${(scores[user] || 0)} נקודות` : '';
+    firebase.database().ref('scores/' + user).once('value').then(snapshot => {
+        userScoreDiv.textContent = user ? `${user} עשה: ${(snapshot.val() || 0)} נקודות` : '';
+    });
 }
 
 userSelect.addEventListener('change', updateDisplay);
+
+// טעינת ניקוד בעת טעינת הדף
 updateDisplay();
 
 // לוודא שהפונקציה זמינה ל-HTML (כפתור)
