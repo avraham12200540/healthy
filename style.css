@@ -11,7 +11,14 @@ body {
     flex-direction: column;
     justify-content: center;
     color: #333;
-    font-size: 26px; /* גם טקסטים רגילים – ענקיים */
+    font-size: 26px;
+    overflow-x: hidden; /* למניעת גלילה מיותרת */
+    animation: fadeInBody 1s ease forwards;
+}
+
+@keyframes fadeInBody {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 h1 {
@@ -19,20 +26,43 @@ h1 {
     margin-bottom: 40px;
     color: #4a148c;
     text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    position: relative;
+    animation: slideIn 1s ease-out forwards;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
 h2, h3, p, label, span {
-    font-size: 28px; /* כל כיתוב רגיל גם ענק וברור */
+    font-size: 28px;
+    opacity: 0;
+    animation: fadeInUp 1s ease forwards;
+    animation-delay: 0.5s;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 select, button {
     margin: 20px;
     padding: 20px 35px;
-    font-size: 28px; /* תוכן הכפתורים והתפריטים – גם ענק */
+    font-size: 28px;
     border: none;
     border-radius: 18px;
     box-shadow: 0 8px 16px rgba(0,0,0,0.15);
     transition: all 0.3s ease;
+    animation: popIn 0.8s ease forwards;
+    animation-delay: 0.7s;
+    opacity: 0;
+}
+
+@keyframes popIn {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
 
 select {
@@ -45,13 +75,37 @@ button {
     color: white;
     cursor: pointer;
     font-weight: bold;
+    position: relative;
+    overflow: hidden;
 }
 
 button:hover {
     background: linear-gradient(45deg, #29b6f6, #0288d1);
     transform: scale(1.08);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.2);
 }
 
 button:active {
     transform: scale(0.96);
+}
+
+/* Ripple Effect */
+button::after {
+    content: "";
+    position: absolute;
+    background: rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    transform: scale(0);
+    width: 100px;
+    height: 100px;
+    top: 50%;
+    left: 50%;
+    pointer-events: none;
+    transition: transform 0.5s, opacity 1s;
+    transform-origin: center;
+}
+
+button:active::after {
+    transform: scale(2.5);
+    opacity: 0;
 }
