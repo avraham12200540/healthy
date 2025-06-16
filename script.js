@@ -41,6 +41,10 @@ Object.keys(activities).forEach(activity => {
     activitySelect.appendChild(opt);
 });
 
+// אתחול אפשרויות optionSelect בעת טעינת הדף
+activitySelect.value = Object.keys(activities)[0];
+activitySelect.dispatchEvent(new Event('change'));
+
 activitySelect.addEventListener('change', () => {
     optionSelect.innerHTML = '';
     const options = activities[activitySelect.value];
@@ -57,7 +61,10 @@ function saveData() {
     const activity = activitySelect.value;
     const option = optionSelect.value;
 
-    if (!user || !activity || !option) return alert('בחר הכל!');
+    if (!user || !activity || !option) {
+        alert('בחר הכל!');
+        return;
+    }
 
     const points = activities[activity][option];
     scores[user] = (scores[user] || 0) + points;
@@ -75,3 +82,6 @@ function updateDisplay() {
 
 userSelect.addEventListener('change', updateDisplay);
 updateDisplay();
+
+// לוודא שהפונקציה זמינה ל-HTML (כפתור)
+window.saveData = saveData;
