@@ -25,6 +25,9 @@ const optionSelect = document.getElementById('optionSelect');
 const totalScoreDiv = document.getElementById('totalScore');
 const userScoreDiv = document.getElementById('userScore');
 
+let chartInstance = null;
+
+// יצירת אפשרויות משתמשים ופעילויות
 users.forEach(user => {
     const opt = document.createElement('option');
     opt.value = user;
@@ -39,10 +42,13 @@ Object.keys(activities).forEach(activity => {
     activitySelect.appendChild(opt);
 });
 
+// אתחל אפשרויות של פעילות
 activitySelect.value = Object.keys(activities)[0];
-activitySelect.dispatchEvent(new Event('change'));
+updateOptionSelect();
 
-activitySelect.addEventListener('change', () => {
+activitySelect.addEventListener('change', updateOptionSelect);
+
+function updateOptionSelect() {
     optionSelect.innerHTML = '';
     const options = activities[activitySelect.value];
     Object.keys(options).forEach(option => {
@@ -51,7 +57,7 @@ activitySelect.addEventListener('change', () => {
         opt.textContent = option;
         optionSelect.appendChild(opt);
     });
-});
+}
 
 function saveData() {
     const user = userSelect.value;
@@ -65,12 +71,11 @@ function saveData() {
 
     const points = activities[activity][option];
 
-    // קרא את הניקוד הקיים מהמסד
+    // עדכון ניקוד משתמש
     firebase.database().ref('scores/' + user).once('value').then(snapshot => {
         let currentUserScore = snapshot.val() || 0;
         let newUserScore = currentUserScore + points;
 
-        // שמור ניקוד מעודכן למשתמש
         firebase.database().ref('scores/' + user).set(newUserScore);
 
         // עדכון ניקוד כללי
@@ -79,27 +84,119 @@ function saveData() {
             let newTotal = currentTotal + points;
             firebase.database().ref('scores/total').set(newTotal);
 
-            // עדכון התצוגה
-            updateDisplay();
+            // עדכון רשימת פעילויות לפי משתמש
+            firebase.database().ref('userActivities/' + user + '/' + activity).once('value').then(actSnap => {
+                let currentActivityPoints = actSnap.val() || 0;
+                let newActivityPoints = currentActivityPoints + points;
+                firebase.database().ref('userActivities/' + user + '/' + activity).set(newActivityPoints);
+
+                updateDisplay();
+            });
         });
     });
 }
 
 function updateDisplay() {
+    // ניקוד כללי
     firebase.database().ref('scores/total').once('value').then(snapshot => {
         totalScoreDiv.textContent = 'ניקוד כללי: ' + (snapshot.val() || 0);
     });
 
     const user = userSelect.value;
+    if (!user) {
+        userScoreDiv.textContent = '';
+        document.getElementById('userActivitiesList').innerHTML = '';
+        if (chartInstance) {
+            chartInstance.destroy();
+            chartInstance = null;
+        }
+        return;
+    }
+
+    // ניקוד משתמש
     firebase.database().ref('scores/' + user).once('value').then(snapshot => {
-        userScoreDiv.textContent = user ? `${user} עשה: ${(snapshot.val() || 0)} נקודות` : '';
+        userScoreDiv.textContent = `${user} עשה: ${(snapshot.val() || 0)} נקודות`;
     });
+
+    // הצגת רשימת פעילויות משתמש
+    showUserActivitiesList();
+
+    // הצגת גרף ניקוד משתמש לפי פעילות
+    showUserScoreChart();
 }
 
 userSelect.addEventListener('change', updateDisplay);
 
-// טעינת ניקוד בעת טעינת הדף
+// הצגת רשימת פעילויות עם ניקוד למשתמש
+function showUserActivitiesList() {
+    const user = userSelect.value;
+    const ul = document.getElementById('userActivitiesList');
+    ul.innerHTML = '';
+
+    if (!user) return;
+
+    firebase.database().ref('userActivities/' + user).once('value').then(snapshot => {
+        const activities = snapshot.val() || {};
+        if (Object.keys(activities).length === 0) {
+            ul.innerHTML = '<li>אין פעילויות</li>';
+            return;
+        }
+        Object.entries(activities).forEach(([activity, points]) => {
+            const li = document.createElement('li');
+            li.textContent = `${activity}: ${points} נקודות`;
+            ul.appendChild(li);
+        });
+    });
+}
+
+// הצגת גרף ניקוד משתמש לפי פעילות
+function showUserScoreChart() {
+    const user = userSelect.value;
+    if (!user) return;
+
+    firebase.database().ref('userActivities/' + user).once('value').then(snapshot => {
+        const data = snapshot.val() || {};
+        const labels = Object.keys(data);
+        const scores = Object.values(data);
+
+        if (chartInstance) {
+            chartInstance.destroy();
+        }
+
+        const ctx = document.getElementById('scoreChart').getContext('2d');
+        chartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: `נקודות לפי פעילות - ${user}`,
+                    data: scores,
+                    backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                scales: {
+                    x: {
+                        beginAtZero: true
+                    }
+                },
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top',
+                    }
+                }
+            }
+        });
+    });
+}
+
+// טעינת נתונים ראשונית
 updateDisplay();
 
-// לוודא שהפונקציה זמינה ל-HTML (כפתור)
+// חשוף לפונקציה כפתור ב-HTML
 window.saveData = saveData;
