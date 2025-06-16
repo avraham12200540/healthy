@@ -4,7 +4,7 @@ body {
     font-family: 'Varela Round', sans-serif;
     direction: rtl;
     background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
-    padding: 40px;
+    padding: 50px;
     text-align: center;
     min-height: 100vh;
     display: flex;
@@ -14,19 +14,19 @@ body {
 }
 
 h1 {
-    font-size: 3em; /* גדול וברור אבל לא מוגזם */
-    margin-bottom: 30px;
+    font-size: 4em; /* כותרת ענקית */
+    margin-bottom: 40px;
     color: #4a148c;
-    text-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.2);
 }
 
 select, button {
-    margin: 15px;
-    padding: 15px 25px;
-    font-size: 20px; /* יותר גדול מקריא ונעים */
+    margin: 20px;
+    padding: 20px 35px; /* ריפוד גדול */
+    font-size: 26px; /* טקסט ממש גדול */
     border: none;
-    border-radius: 15px;
-    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+    border-radius: 18px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
     transition: all 0.3s ease;
 }
 
@@ -44,9 +44,9 @@ button {
 
 button:hover {
     background: linear-gradient(45deg, #29b6f6, #0288d1);
-    transform: scale(1.05);
+    transform: scale(1.08);
 }
 
 button:active {
-    transform: scale(0.98);
+    transform: scale(0.96);
 }
