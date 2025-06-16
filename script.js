@@ -25,6 +25,7 @@ const optionSelect = document.getElementById('optionSelect');
 const totalScoreDiv = document.getElementById('totalScore');
 const userScoreDiv = document.getElementById('userScore');
 
+// מילוי dropdowns
 users.forEach(user => {
     const opt = document.createElement('option');
     opt.value = user;
@@ -39,10 +40,13 @@ Object.keys(activities).forEach(activity => {
     activitySelect.appendChild(opt);
 });
 
+// ברירת מחדל
 activitySelect.value = Object.keys(activities)[0];
-activitySelect.dispatchEvent(new Event('change'));
+populateOptions();
 
-activitySelect.addEventListener('change', () => {
+activitySelect.addEventListener('change', populateOptions);
+
+function populateOptions() {
     optionSelect.innerHTML = '';
     const options = activities[activitySelect.value];
     Object.keys(options).forEach(option => {
@@ -51,7 +55,7 @@ activitySelect.addEventListener('change', () => {
         opt.textContent = option;
         optionSelect.appendChild(opt);
     });
-});
+}
 
 function saveData() {
     const user = userSelect.value;
@@ -65,19 +69,19 @@ function saveData() {
 
     const points = activities[activity][option];
 
-    // קרא את הניקוד הקיים מהמסד
-    firebase.database().ref('scores/' + user).once('value').then(snapshot => {
+    // קריאת ניקוד קיים
+    database.ref('scores/' + user).once('value').then(snapshot => {
         let currentUserScore = snapshot.val() || 0;
         let newUserScore = currentUserScore + points;
 
-        // שמור ניקוד מעודכן למשתמש
-        firebase.database().ref('scores/' + user).set(newUserScore);
+        // שמירת ניקוד חדש
+        database.ref('scores/' + user).set(newUserScore);
 
         // עדכון ניקוד כללי
-        firebase.database().ref('scores/total').once('value').then(totalSnap => {
+        database.ref('scores/total').once('value').then(totalSnap => {
             let currentTotal = totalSnap.val() || 0;
             let newTotal = currentTotal + points;
-            firebase.database().ref('scores/total').set(newTotal);
+            database.ref('scores/total').set(newTotal);
 
             // עדכון התצוגה
             updateDisplay();
@@ -86,20 +90,23 @@ function saveData() {
 }
 
 function updateDisplay() {
-    firebase.database().ref('scores/total').once('value').then(snapshot => {
+    // ניקוד כללי
+    database.ref('scores/total').once('value').then(snapshot => {
         totalScoreDiv.textContent = 'ניקוד כללי: ' + (snapshot.val() || 0);
     });
 
+    // ניקוד של המשתמש הנבחר
     const user = userSelect.value;
-    firebase.database().ref('scores/' + user).once('value').then(snapshot => {
+    database.ref('scores/' + user).once('value').then(snapshot => {
         userScoreDiv.textContent = user ? `${user} עשה: ${(snapshot.val() || 0)} נקודות` : '';
     });
 }
 
+// עדכון תצוגה בשינוי משתמש
 userSelect.addEventListener('change', updateDisplay);
 
 // טעינת ניקוד בעת טעינת הדף
 updateDisplay();
 
-// לוודא שהפונקציה זמינה ל-HTML (כפתור)
+// זמינות הפונקציה לכפתור ב-HTML
 window.saveData = saveData;
