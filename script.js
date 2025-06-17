@@ -24,6 +24,7 @@ const activitySelect = document.getElementById('activitySelect');
 const optionSelect = document.getElementById('optionSelect');
 const totalScoreDiv = document.getElementById('totalScore');
 const userScoreDiv = document.getElementById('userScore');
+const togetherCheckbox = document.getElementById('togetherCheckbox'); // חדש
 
 // מילוי dropdowns
 users.forEach(user => {
@@ -61,13 +62,19 @@ function saveData() {
     const user = userSelect.value;
     const activity = activitySelect.value;
     const option = optionSelect.value;
+    const didTogether = togetherCheckbox.checked; // האם נבחר תיבה
 
     if (!user || !activity || !option) {
         alert('בחר הכל!');
         return;
     }
 
-    const points = activities[activity][option];
+    let points = activities[activity][option];
+
+    // אם סומן שעשו ביחד - הכפלת ניקוד פי 1.5
+    if (didTogether) {
+        points = Math.round(points * 1.5); // עיגול לניקוד שלם
+    }
 
     // קריאת ניקוד קיים
     database.ref('scores/' + user).once('value').then(snapshot => {
