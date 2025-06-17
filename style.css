@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Varela+Round&family=Rubik:wght@500&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Rubik+Scribble&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playpen+Sans+Hebrew&display=swap');
 
 
 
@@ -23,7 +23,7 @@ body {
 }
 
 .handwriting {
-    font-family: 'Rubik Scribble', cursive;
+    font-family: 'Playpen Sans Hebrew', cursive;
     font-size: 26px; /* כמו שביקשת */
     color: #333; /* או כל צבע אחר שתרצה */
 }
