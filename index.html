@@ -21,6 +21,15 @@
         <label>בחר אפשרות:</label>
         <select id="optionSelect"></select>
     </div>
+
+    <!-- תיבת סימון להכפלת ניקוד -->
+    <div>
+        <label>
+            <input type="checkbox" id="togetherCheckbox">
+            האם עשיתי את זה יחד עם עוד מישהו?
+        </label>
+    </div>
+
     <button onclick="saveData()">שמור פעילות</button>
 
     <!-- Firebase SDK -->
@@ -44,7 +53,7 @@
       const database = firebase.database();
     </script>
 
-    <!-- קובץ הסקריפט שלך אחרי שה-Firebase כבר מאותחל -->
+    <!-- קובץ הסקריפט שלך אחרי ה-Firebase -->
     <script src="script.js"></script>
 </body>
 </html>
