@@ -3,7 +3,7 @@
 body {
     font-family: 'Varela Round', sans-serif;
     direction: rtl;
-    background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+    background: url('1.png') center/cover no-repeat, linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
     padding: 50px;
     text-align: center;
     min-height: 100vh;
