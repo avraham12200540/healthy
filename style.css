@@ -3,7 +3,9 @@
 body {
     font-family: 'Varela Round', sans-serif;
     direction: rtl;
-    background: url('1.png') center/cover no-repeat, linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+    background: 
+        linear-gradient(rgba(161, 196, 253, 0.7), rgba(194, 233, 251, 0.7)),
+        url('1.png') center/cover no-repeat;
     padding: 50px;
     text-align: center;
     min-height: 100vh;
@@ -16,6 +18,7 @@ body {
     animation: fadeInBody 1s ease forwards, float 20s ease-in-out infinite;
     transition: background 0.5s ease, color 0.5s ease;
 }
+
 
 .content {
     background: rgba(255, 255, 255, 0.7); /* לבן שקוף */
