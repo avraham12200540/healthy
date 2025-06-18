@@ -26,6 +26,9 @@ const optionSelect = document.getElementById('optionSelect');
 const totalScoreDiv = document.getElementById('totalScore');
 const userScoreDiv = document.getElementById('userScore');
 const togetherCheckbox = document.getElementById('togetherCheckbox'); // חדש
+const historyUserSelect = document.getElementById('historyUserSelect'); // חדש
+
+
 
 // מילוי dropdowns
 users.forEach(user => {
@@ -33,6 +36,13 @@ users.forEach(user => {
     opt.value = user;
     opt.textContent = user;
     userSelect.appendChild(opt);
+});
+
+
+ const opt2 = document.createElement('option'); // חדש
+    opt2.value = user; // חדש
+    opt2.textContent = user; // חדש
+    historyUserSelect.appendChild(opt2); // חדש
 });
 
 Object.keys(activities).forEach(activity => {
@@ -45,6 +55,9 @@ Object.keys(activities).forEach(activity => {
 // ברירת מחדל
 activitySelect.value = Object.keys(activities)[0];
 populateOptions();
+
+historyUserSelect.addEventListener('change', renderActivityHistory); // חדש
+
 
 activitySelect.addEventListener('change', populateOptions);
 
@@ -77,6 +90,23 @@ function saveData() {
         points = Math.round(points * 1.5); // עיגול לניקוד שלם
     }
 
+   const now = new Date();
+    const activityData = {
+        user,
+        name: activity,
+        option,
+        amount: points,
+        date: now.toLocaleDateString('he-IL'),
+        time: now.toLocaleTimeString('he-IL'),
+        withSomeone: didTogether
+    };
+
+ // NEW: Save activity to Firebase under activityHistory (מודגש בצהוב)
+    const newActivityKey = database.ref().child('activityHistory').push().key; // חדש
+    database.ref('activityHistory/' + newActivityKey).set(activityData); // חדש
+
+
+    
     // קריאת ניקוד קיים
     database.ref('scores/' + user).once('value').then(snapshot => {
         let currentUserScore = snapshot.val() || 0;
@@ -93,6 +123,8 @@ function saveData() {
 
             // עדכון התצוגה
             updateDisplay();
+            renderActivityHistory(); // NEW: Update history after save (מודגש בצהוב)
+
         });
     });
 }
@@ -110,8 +142,35 @@ function updateDisplay() {
     });
 }
 
+// NEW: renderActivityHistory to read history from Firebase (מודגש בצהוב)
+function renderActivityHistory() { // חדש
+    const historyContainer = document.getElementById('activity-history');
+    historyContainer.innerHTML = '';
 
+    const selectedUser = historyUserSelect.value;
 
+    database.ref('activityHistory').once('value').then(snapshot => {
+        const historyData = snapshot.val();
+        if (!historyData) return;
+
+        const activities = Object.values(historyData).filter(activity => {
+            return selectedUser === 'all' || activity.user === selectedUser;
+        });
+
+        activities.sort((a, b) => new Date(b.date + ' ' + b.time) - new Date(a.date + ' ' + a.time));
+
+        activities.forEach(activity => {
+            const li = document.createElement('li');
+            li.className = 'bg-gray-100 p-2 rounded shadow mb-2';
+            li.innerHTML = `
+                <p><strong>${activity.name} - ${activity.option}</strong> - ${activity.amount} נקודות</p>
+                <p class="text-sm text-gray-600">${activity.date} בשעה ${activity.time} - משתמש: ${activity.user}</p>
+                ${activity.withSomeone ? '<p class="text-sm text-blue-600">בוצע עם מישהו נוסף</p>' : ''}
+            `;
+            historyContainer.appendChild(li);
+        });
+    });
+} // סוף חדש
 
 // טעינת ניקוד בעת טעינת הדף
 updateDisplay();
