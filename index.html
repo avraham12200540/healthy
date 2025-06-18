@@ -43,11 +43,32 @@
 
     <button onclick="saveData()">שמור פעילות</button>
 
+<h2 class="text-xl font-semibold mt-6 mb-2">היסטוריית פעילויות</h2>
 
-    <h2 class="text-xl font-semibold mt-6 mb-2">היסטוריית פעילויות</h2>
+    <label class="handwriting">היסטוריה לפי משתמש:</label>
+    <select id="historyUserSelect">
+        <option value="all">הצג הכל</option>
+    </select>
+
     <ul id="activity-history" class="space-y-2"></ul>
 
-        
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+    <script>
+      const firebaseConfig = {
+        apiKey: "AIzaSyB8B7RW9JmsQfxieR-arwG3alPrW585jRo",
+        authDomain: "health-project-68bb1.firebaseapp.com",
+        databaseURL: "",
+        projectId: "health-project-68bb1",
+        storageBucket: "health-project-68bb1.appspot.com",
+        messagingSenderId: "1008505100763",
+        appId: "1:1008505100763:web:1e8878759bc68916176ffe"
+      };
+      firebase.initializeApp(firebaseConfig);
+      const database = firebase.database();
+    </script>
+
+  
         <div class="sidebar">
       <h2>ניקוד פעילויות</h2>
  
