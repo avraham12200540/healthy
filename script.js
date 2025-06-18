@@ -38,7 +38,7 @@ users.forEach(user => {
     userSelect.appendChild(opt);
 });
 
-
+users.forEach(user => {
  const opt2 = document.createElement('option'); // חדש
     opt2.value = user; // חדש
     opt2.textContent = user; // חדש
