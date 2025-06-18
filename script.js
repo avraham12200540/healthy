@@ -110,6 +110,31 @@ function updateDisplay() {
     });
 }
 
+
+function renderActivityHistory() {
+    const historyContainer = document.getElementById('activity-history');
+    historyContainer.innerHTML = '';
+
+    const history = JSON.parse(localStorage.getItem('activityHistory')) || [];
+
+    history.forEach((activity, index) => {
+        const li = document.createElement('li');
+        li.className = 'bg-gray-100 p-2 rounded shadow flex justify-between items-center';
+
+        li.innerHTML = `
+            <div>
+                <p><strong>${activity.name}</strong> - ${activity.amount} נקודות</p>
+                <p class="text-sm text-gray-600">${activity.date} בשעה ${activity.time}</p>
+                ${activity.withSomeone ? '<p class="text-sm text-blue-600">בוצע עם מישהו נוסף</p>' : ''}
+            </div>
+            <button onclick="deleteActivity(${index})" class="bg-red-500 text-white px-2 py-1 rounded">מחק</button>
+        `;
+        historyContainer.appendChild(li);
+    });
+}
+
+
+
 // עדכון תצוגה בשינוי משתמש
 userSelect.addEventListener('change', updateDisplay);
 
