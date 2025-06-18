@@ -111,67 +111,7 @@ function updateDisplay() {
 }
 
 
-function renderActivityHistory() {
-    const historyContainer = document.getElementById('activity-history');
-    historyContainer.innerHTML = '';
 
-    const history = JSON.parse(localStorage.getItem('activityHistory')) || [];
-
-    history.forEach((activity, index) => {
-        const li = document.createElement('li');
-        li.className = 'bg-gray-100 p-2 rounded shadow flex justify-between items-center';
-
-        li.innerHTML = `
-            <div>
-                <p><strong>${activity.name}</strong> - ${activity.amount} נקודות</p>
-                <p class="text-sm text-gray-600">${activity.date} בשעה ${activity.time}</p>
-                ${activity.withSomeone ? '<p class="text-sm text-blue-600">בוצע עם מישהו נוסף</p>' : ''}
-            </div>
-            <button onclick="deleteActivity(${index})" class="bg-red-500 text-white px-2 py-1 rounded">מחק</button>
-        `;
-        historyContainer.appendChild(li);
-    });
-}
-
-function deleteActivity(index) {
-    let activityHistory = JSON.parse(localStorage.getItem('activityHistory')) || [];
-    if (index < 0 || index >= activityHistory.length) return;
-
-    // הורדת הניקוד מה-Firebase (גם מהמשתמש וגם מהניקוד הכללי)
-    const activityToDelete = activityHistory[index];
-    const pointsToRemove = activityToDelete.amount;
-    const user = activityToDelete.user;
-
-    // הורדת ניקוד מהמשתמש
-    database.ref('scores/' + user).once('value').then(snapshot => {
-        let currentUserScore = snapshot.val() || 0;
-        let newUserScore = currentUserScore - pointsToRemove;
-        if (newUserScore < 0) newUserScore = 0;
-        database.ref('scores/' + user).set(newUserScore);
-
-        // הורדת ניקוד כללי
-        database.ref('scores/total').once('value').then(totalSnap => {
-            let currentTotal = totalSnap.val() || 0;
-            let newTotal = currentTotal - pointsToRemove;
-            if (newTotal < 0) newTotal = 0;
-            database.ref('scores/total').set(newTotal);
-
-            // עדכון תצוגות ניקוד
-            updateDisplay();
-        });
-    });
-
-    // הסרת הפעילות מההיסטוריה ושמירתה
-    activityHistory.splice(index, 1);
-    localStorage.setItem('activityHistory', JSON.stringify(activityHistory));
-
-    // עדכון התצוגה של ההיסטוריה
-    renderActivityHistory();
-}
-
-
-// עדכון תצוגה בשינוי משתמש
-userSelect.addEventListener('change', updateDisplay);
 
 // טעינת ניקוד בעת טעינת הדף
 updateDisplay();
