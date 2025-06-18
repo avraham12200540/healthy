@@ -85,6 +85,14 @@ body {
     height: 100vh;    /* גובה בדיוק כמו גובה החלון */
 }
 
+.sidebar {
+    width: 0;
+    overflow: hidden;
+    transition: width 0.3s ease;
+}
+.sidebar.open {
+    width: 250px;
+}
 
 .content {
     background: rgba(255, 255, 255, 0.7); /* לבן שקוף */
