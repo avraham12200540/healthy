@@ -133,6 +133,41 @@ function renderActivityHistory() {
     });
 }
 
+function deleteActivity(index) {
+    let activityHistory = JSON.parse(localStorage.getItem('activityHistory')) || [];
+    if (index < 0 || index >= activityHistory.length) return;
+
+    // הורדת הניקוד מה-Firebase (גם מהמשתמש וגם מהניקוד הכללי)
+    const activityToDelete = activityHistory[index];
+    const pointsToRemove = activityToDelete.amount;
+    const user = activityToDelete.user;
+
+    // הורדת ניקוד מהמשתמש
+    database.ref('scores/' + user).once('value').then(snapshot => {
+        let currentUserScore = snapshot.val() || 0;
+        let newUserScore = currentUserScore - pointsToRemove;
+        if (newUserScore < 0) newUserScore = 0;
+        database.ref('scores/' + user).set(newUserScore);
+
+        // הורדת ניקוד כללי
+        database.ref('scores/total').once('value').then(totalSnap => {
+            let currentTotal = totalSnap.val() || 0;
+            let newTotal = currentTotal - pointsToRemove;
+            if (newTotal < 0) newTotal = 0;
+            database.ref('scores/total').set(newTotal);
+
+            // עדכון תצוגות ניקוד
+            updateDisplay();
+        });
+    });
+
+    // הסרת הפעילות מההיסטוריה ושמירתה
+    activityHistory.splice(index, 1);
+    localStorage.setItem('activityHistory', JSON.stringify(activityHistory));
+
+    // עדכון התצוגה של ההיסטוריה
+    renderActivityHistory();
+}
 
 
 // עדכון תצוגה בשינוי משתמש
@@ -140,6 +175,8 @@ userSelect.addEventListener('change', updateDisplay);
 
 // טעינת ניקוד בעת טעינת הדף
 updateDisplay();
+
+renderActivityHistory();
 
 // זמינות הפונקציה לכפתור ב-HTML
 window.saveData = saveData;
