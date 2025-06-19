@@ -106,7 +106,7 @@ function updateDisplay() {
     // ניקוד של המשתמש הנבחר
     const user = userSelect.value;
     database.ref('scores/' + user).once('value').then(snapshot => {
-        userScoreDiv.textContent = user ? ${user} עשה: ${(snapshot.val() || 0)} נקודות : '';
+    userScoreDiv.textContent = user ? `${user} עשה: ${(snapshot.val() || 0)} נקודות` : '';
     });
 }
 
