@@ -43,7 +43,6 @@ body {
     top: 50px;
     bottom: 50px;
     width: 250px;
-    height: 100%;
     background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
     box-shadow: 2px 0 10px rgba(0,0,0,0.2);
     padding: 20px;
