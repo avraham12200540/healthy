@@ -265,3 +265,85 @@ body.dark-mode h1 {
 .toggle-dark:hover {
     background: #ffe0b2;
 }
+
+
+
+
+
+/* ממשק הצעות פרסים */
+#prizeSuggestionBox {
+    margin-top: 30px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.4);
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#prizeInput {
+    padding: 15px;
+    font-size: 20px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    width: 70%;
+    margin: 0 15px;
+}
+
+/* סיידבר ימני להצעות */
+.suggestions-sidebar {
+    position: fixed;
+    right: 0;
+    top: 150px;
+    bottom: 20px;
+    width: 250px;
+    background: linear-gradient(135deg, #ffcc80, #ffb74d);
+    box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+    padding: 20px;
+    box-sizing: border-box;
+    color: #333;
+    font-size: 18px;
+    text-align: right;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+    overflow-y: auto;
+    z-index: 100;
+}
+
+.suggestions-sidebar h2 {
+    margin-top: 0;
+    font-size: 22px;
+    color: #333;
+    text-shadow: 1px 1px 1px rgba(255,255,255,0.5);
+}
+
+.suggestions-sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.suggestions-sidebar ul li {
+    background: rgba(255, 255, 255, 0.6);
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.suggestions-sidebar ul li small {
+    display: block;
+    font-size: 14px;
+    color: #666;
+}
+
+/* אנימציה לכפתור שמירה */
+@keyframes savingPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.saving {
+    animation: savingPulse 1s infinite;
+}
