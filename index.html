@@ -43,6 +43,14 @@
 
     <button onclick="saveData()">שמור פעילות</button>
 
+    <!-- ממשק הצעות פרסים -->
+    <div id="prizeSuggestionBox">
+        <label class="handwriting" for="prizeInput">הצע פרס לסוף המבצע:</label>
+        <input type="text" id="prizeInput" placeholder="מה אתה מציע?">
+        <button onclick="submitPrizeSuggestion()">שלח הצעה</button>
+    </div>
+
+        
         <div class="sidebar">
       <h2>ניקוד פעילויות</h2>
  
@@ -107,6 +115,14 @@
       </ul>
     </div>
 
+
+    <!-- סיידבר ימני להצעות פרסים -->
+    <div class="suggestions-sidebar">
+        <h2>הצעות פרסים</h2>
+        <ul id="suggestionsList"></ul>
+    </div>
+
+        
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
