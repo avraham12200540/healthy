@@ -154,19 +154,26 @@ h2:hover, h3:hover, p:hover, label:hover, span:hover {
     max-width: 600px;
 }
 
+#activityForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;  /* ממרכז את ה־select וה־button */
+    gap: 10px;            /* רווח בין הפריטים */
+    width: 100%;
+}
+
 select, button {
-    margin: 10px;
-    padding: 10px 20px; /* קטן יותר ומדויק */
-    font-size: 20px; /* גודל טקסט נוח */
+    display: block;
+    padding: 10px 20px;
+    font-size: 20px;
     border: none;
     border-radius: 12px;
     box-shadow: 0 8px 16px rgba(0,0,0,0.15);
     transition: all 0.3s ease;
-    animation: popIn 0.8s ease forwards;
-    animation-delay: 0.7s;
-    opacity: 0;
-    width: fit-content; /* ייקח רק את גודל התוכן */
+    width: fit-content;   /* גודל לפי התוכן */
     max-width: 100%;
+    text-align: right;    /* התוכן יישאר מיושר לימין בתוך האלמנט */
+    direction: rtl;       /* לשמירה על כיוון טקסט בעברית */
 }
 
 
