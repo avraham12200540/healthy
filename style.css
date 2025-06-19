@@ -155,17 +155,20 @@ h2:hover, h3:hover, p:hover, label:hover, span:hover {
 }
 
 select, button {
-    margin: 20px;
-    padding: 20px 35px;
-    font-size: 28px;
+    margin: 10px;
+    padding: 10px 20px; /* קטן יותר ומדויק */
+    font-size: 20px; /* גודל טקסט נוח */
     border: none;
-    border-radius: 18px;
+    border-radius: 12px;
     box-shadow: 0 8px 16px rgba(0,0,0,0.15);
     transition: all 0.3s ease;
     animation: popIn 0.8s ease forwards;
     animation-delay: 0.7s;
     opacity: 0;
+    width: fit-content; /* ייקח רק את גודל התוכן */
+    max-width: 100%;
 }
+
 
 @keyframes popIn {
     from { transform: scale(0.8); opacity: 0; }
