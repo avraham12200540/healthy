@@ -34,6 +34,7 @@ users.forEach(user => {
     opt.textContent = user;
     userSelect.appendChild(opt);
 });
+userSelect.value = users[0]; // בחירת ברירת מחדל
 
 Object.keys(activities).forEach(activity => {
     const opt = document.createElement('option');
@@ -42,9 +43,10 @@ Object.keys(activities).forEach(activity => {
     activitySelect.appendChild(opt);
 });
 
-// ברירת מחדל
+// ברירת מחדל לאקטיביטי
 activitySelect.value = Object.keys(activities)[0];
 populateOptions();
+
 
 activitySelect.addEventListener('change', populateOptions);
 
