@@ -1,139 +1,64 @@
-<!DOCTYPE html>
-<html lang="he">
+<!DOCTYPE html> <!-- מציין שמדובר במסמך HTML5 -->
+<html lang="he"> <!-- קובע את שפת המסמך לעברית -->
 <head>
-    <meta charset="UTF-8">
-    <title>מבצע הבריאות של משפחת גלסר</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-    <link rel="manifest" href="site.webmanifest">
-    <meta name="theme-color" content="#a1c4fd">
+    <meta charset="UTF-8"> <!-- מגדיר קידוד תווים ל-UTF-8 (תמיכה בעברית) -->
+    <title>מבצע הבריאות של משפחת גלסר</title> <!-- כותרת הדף המופיעה בטאב -->
+    <link rel="stylesheet" href="style.css"> <!-- קישור לקובץ העיצוב החיצוני -->
+    
+    <!-- אייקונים למכשירים -->
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png"> <!-- אייקון לאייפון/אייפד -->
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png"> <!-- אייקון 32x32 -->
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png"> <!-- אייקון 16x16 -->
+    <link rel="manifest" href="site.webmanifest"> <!-- הגדרות PWA -->
+    <meta name="theme-color" content="#a1c4fd"> <!-- צבע הטאב במכשירים תומכים -->
 </head>
-<body>
-    <div>
-        <h1 class="main-title">ברוכים הבאים לממשק הניקוד במבצע הבריאות של משפחת גלסר!</h1>
-    <div>
+<body> <!-- גוף הדף מתחיל כאן -->
+
+    <!-- כותרת ראשית בדף -->
+    <h1 class="main-title">ברוכים הבאים לממשק הניקוד במבצע הבריאות של משפחת גלסר!</h1>
+
+    <!-- הצגת ניקוד כללי לכל המשתמשים -->
     <div id="totalScore">ניקוד כללי: 0</div>
+
+    <!-- הצגת ניקוד אישי למשתמש הנבחר -->
     <div id="userScore"></div>
 
-    <div>
-        <label class="handwriting">מי אני?</label>
-        <select id="userSelect"></select>
+    <!-- בחירת משתמש -->
+    <label class="handwriting">מי אני?</label>
+    <select id="userSelect"></select> <!-- התפריט יתמלא דינאמית ב-JS -->
 
-    <div>
-    <div>
+    <!-- בחירת פעילות -->
+    <label class="handwriting">מה עשיתי?</label>
+    <select id="activitySelect"></select> <!-- יתמלא בפעילויות מה-JS -->
 
-        <label class="handwriting">מה עשיתי?</label>
-        <select id="activitySelect"></select>
-    <div>
-    <div>
-        <label class="handwriting">כמה או מתי?</label>
-        <select id="optionSelect"></select>
+    <!-- בחירת אפשרות או פרמטר לפעילות -->
+    <label class="handwriting">כמה או מתי?</label>
+    <select id="optionSelect"></select> <!-- יתמלא באופציות ספציפיות לפעילות -->
 
-    </div>
-
-    <!-- תיבת סימון להכפלת ניקוד -->
+    <!-- תיבת סימון להכפלת ניקוד (עשייה עם מישהו נוסף) -->
     <div>
         <label>
-            <input type="checkbox" id="togetherCheckbox">
+            <input type="checkbox" id="togetherCheckbox"> <!-- תיבת סימון להכפלת ניקוד -->
             האם עשיתי את זה יחד עם עוד מישהו?
         </label>
     </div>
 
+    <!-- כפתור לשמירת הפעילות למסד הנתונים -->
     <button onclick="saveData()">שמור פעילות</button>
 
-<h2 class="text-xl font-semibold mt-6 mb-2">היסטוריית פעילויות</h2>
+    <!-- כותרת היסטוריית הפעילויות -->
+    <h2 class="text-xl font-semibold mt-6 mb-2">היסטוריית פעילויות</h2>
 
+    <!-- בחירת משתמש לסינון היסטוריה -->
     <label class="handwriting">היסטוריה לפי משתמש:</label>
     <select id="historyUserSelect">
-        <option value="all">הצג הכל</option>
+        <option value="all">הצג הכל</option> <!-- ברירת מחדל: הצגת כל המשתמשים -->
     </select>
 
+    <!-- רשימת הפעילויות שתתמלא דינאמית מה-JS -->
     <ul id="activity-history" class="space-y-2"></ul>
 
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-    <script>
-      const firebaseConfig = {
-        apiKey: "AIzaSyB8B7RW9JmsQfxieR-arwG3alPrW585jRo",
-        authDomain: "health-project-68bb1.firebaseapp.com",
-        databaseURL: "",
-        projectId: "health-project-68bb1",
-        storageBucket: "health-project-68bb1.appspot.com",
-        messagingSenderId: "1008505100763",
-        appId: "1:1008505100763:web:1e8878759bc68916176ffe"
-      };
-      firebase.initializeApp(firebaseConfig);
-      const database = firebase.database();
-    </script>
-
-  
-        <div class="sidebar">
-      <h2>ניקוד פעילויות</h2>
- 
-        <ul>
-            
-        <li>קימה בבוקר לתפילה - 5:45: 10 נק'</li>
-        <li>קימה בבוקר לתפילה - 6:30: 5 נק'</li>
-        <li>קימה בבוקר לתפילה - 7:00: 3 נק'</li>
-        <li>קימה בבוקר לתפילה - 8:00: 1 נק'</li>
-
-        <li>צחצוח שיניים - בוקר: 2 נק'</li>
-        <li>צחצוח שיניים - ערב: 2 נק'</li>
-
-        <li>לימוד תורה - רבע שעה: 5 נק'</li>
-        <li>לימוד תורה - חצי שעה: 15 נק'</li>
-        <li>לימוד תורה - שעה: 30 נק'</li>
-        <li>לימוד תורה - שעתיים: 60 נק'</li>
-        <li>לימוד תורה - שלוש: 90 נק'</li>
-
-        <li>מתח ברצף - יחס 1:1 נק'</li>
-
-        <li>שכיבות סמיכה ברצף - יחס 2:1 נק'</li>
-
-        <li>כפיפות בטן - יחס 5:1 נק'</li>
-
-        <li>אכילת פרי - פרי אחד: 1 נק'</li>
-
-        <li>אכילת ירק - ירק אחד: 2 נק'</li>
-
-        <li>הליכה לישון - 21:30: 5 נק'</li>
-        <li>הליכה לישון - 22:00: 3 נק'</li>
-        <li>הליכה לישון - 23:00: 1 נק'</li>
-
-        <li>עבודות חופש - רבע שעה: 1 נק'</li>
-        <li>עבודות חופש - חצי שעה: 3 נק'</li>
-        <li>עבודות חופש - שעה: 8 נק'</li>
-        <li>עבודות חופש - שעה וחצי: 13 נק'</li>
-        <li>עבודות חופש - שעתיים: 20 נק'</li>
-
-        <li>רכיבה על אופניים - 10 דקות: 2 נק'</li>
-
-        <li>הליכה - רבע שעה: 1 נק'</li>
-
-        <li>שחייה - יחס בריכה 1:1 נק'</li>
-
-        <li>משחק כדור - רבע שעה: 1 נק'</li>
-        <li>משחק כדור - חצי שעה: 3 נק'</li>
-        <li>משחק כדור - שעה: 8 נק'</li>
-
-        <li>הכנת סלט למשפחה - פעם אחת: 1 נק'</li>
-
-        <li>הכנת ארוחה מבושלת למשפחה - בוקר: 2 נק'</li>
-        <li>הכנת ארוחה מבושלת למשפחה - צהריים: 4 נק'</li>
-        <li>הכנת ארוחה מבושלת למשפחה - ערב: 3 נק'</li>
-
-        <li>שתיית מים - 2 ליטר: 1 נק'</li>
-
-        <li>עזרה בבית - 5 דקות: 1 נק'</li>
-        <li>עזרה בבית - 10 דקות: 2 נק'</li>
-        <li>עזרה בבית - 20 דקות: 5 נק'</li>
-            
-      </ul>
-    </div>
-
-    <!-- Firebase SDK -->
+    <!-- טעינת Firebase SDK לגרסת Compat (ישנה) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
@@ -142,7 +67,7 @@
       const firebaseConfig = {
         apiKey: "AIzaSyB8B7RW9JmsQfxieR-arwG3alPrW585jRo",
         authDomain: "health-project-68bb1.firebaseapp.com",
-        databaseURL: "https://health-project-68bb1-default-rtdb.firebaseio.com",
+        databaseURL: "https://health-project-68bb1-default-rtdb.firebaseio.com", // הוספתי כתובת מסד נתונים
         projectId: "health-project-68bb1",
         storageBucket: "health-project-68bb1.appspot.com",
         messagingSenderId: "1008505100763",
@@ -151,10 +76,56 @@
 
       // אתחול Firebase
       firebase.initializeApp(firebaseConfig);
-      const database = firebase.database();
+      const database = firebase.database(); // חיבור למסד הנתונים
     </script>
 
-    <!-- קובץ הסקריפט שלך אחרי ה-Firebase -->
+    <!-- סרגל צד - הצגת ניקוד פעילויות למידע -->
+    <div class="sidebar">
+      <h2>ניקוד פעילויות</h2>
+      <ul>
+        <!-- כללי ניקוד (מידע בלבד) -->
+        <li>קימה בבוקר לתפילה - 5:45: 10 נק'</li>
+        <li>קימה בבוקר לתפילה - 6:30: 5 נק'</li>
+        <li>קימה בבוקר לתפילה - 7:00: 3 נק'</li>
+        <li>קימה בבוקר לתפילה - 8:00: 1 נק'</li>
+        <li>צחצוח שיניים - בוקר: 2 נק'</li>
+        <li>צחצוח שיניים - ערב: 2 נק'</li>
+        <li>לימוד תורה - רבע שעה: 5 נק'</li>
+        <li>לימוד תורה - חצי שעה: 15 נק'</li>
+        <li>לימוד תורה - שעה: 30 נק'</li>
+        <li>לימוד תורה - שעתיים: 60 נק'</li>
+        <li>לימוד תורה - שלוש: 90 נק'</li>
+        <li>מתח ברצף - יחס 1:1 נק'</li>
+        <li>שכיבות סמיכה ברצף - יחס 2:1 נק'</li>
+        <li>כפיפות בטן - יחס 5:1 נק'</li>
+        <li>אכילת פרי - פרי אחד: 1 נק'</li>
+        <li>אכילת ירק - ירק אחד: 2 נק'</li>
+        <li>הליכה לישון - 21:30: 5 נק'</li>
+        <li>הליכה לישון - 22:00: 3 נק'</li>
+        <li>הליכה לישון - 23:00: 1 נק'</li>
+        <li>עבודות חופש - רבע שעה: 1 נק'</li>
+        <li>עבודות חופש - חצי שעה: 3 נק'</li>
+        <li>עבודות חופש - שעה: 8 נק'</li>
+        <li>עבודות חופש - שעה וחצי: 13 נק'</li>
+        <li>עבודות חופש - שעתיים: 20 נק'</li>
+        <li>רכיבה על אופניים - 10 דקות: 2 נק'</li>
+        <li>הליכה - רבע שעה: 1 נק'</li>
+        <li>שחייה - יחס בריכה 1:1 נק'</li>
+        <li>משחק כדור - רבע שעה: 1 נק'</li>
+        <li>משחק כדור - חצי שעה: 3 נק'</li>
+        <li>משחק כדור - שעה: 8 נק'</li>
+        <li>הכנת סלט למשפחה - פעם אחת: 1 נק'</li>
+        <li>הכנת ארוחה מבושלת למשפחה - בוקר: 2 נק'</li>
+        <li>הכנת ארוחה מבושלת למשפחה - צהריים: 4 נק'</li>
+        <li>הכנת ארוחה מבושלת למשפחה - ערב: 3 נק'</li>
+        <li>שתיית מים - 2 ליטר: 1 נק'</li>
+        <li>עזרה בבית - 5 דקות: 1 נק'</li>
+        <li>עזרה בבית - 10 דקות: 2 נק'</li>
+        <li>עזרה בבית - 20 דקות: 5 נק'</li>
+      </ul>
+    </div>
+
+    <!-- חיבור לקובץ הסקריפט הראשי שלך שמטפל בכל הפעולות -->
     <script src="script.js"></script>
 </body>
 </html>
