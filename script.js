@@ -27,6 +27,7 @@ const optionSelect = document.getElementById('optionSelect');
 const totalScoreDiv = document.getElementById('totalScore');
 const userScoreDiv = document.getElementById('userScore');
 const togetherCheckbox = document.getElementById('togetherCheckbox'); // חדש
+const suggestionsRef = database.ref('suggestions');
 
 // מילוי dropdowns
 users.forEach(user => {
@@ -72,33 +73,60 @@ function saveData() {
         alert('בחר הכל!');
         return;
     }
-
+    
     let points = activities[activity][option];
+    if (didTogether) points = Math.round(points * 1.5);
 
-    // אם סומן שעשו ביחד - הכפלת ניקוד פי 1.5
-    if (didTogether) {
-        points = Math.round(points * 1.5); // עיגול לניקוד שלם
-    }
+    toggleSavingIndicator(true);
 
-    // קריאת ניקוד קיים
     database.ref('scores/' + user).once('value').then(snapshot => {
         let currentUserScore = snapshot.val() || 0;
         let newUserScore = currentUserScore + points;
 
-        // שמירת ניקוד חדש
-        database.ref('scores/' + user).set(newUserScore);
-
-        // עדכון ניקוד כללי
+        database.ref('scores/' + user).set(newUserScore).catch(handleFirebaseError);
+        
         database.ref('scores/total').once('value').then(totalSnap => {
             let currentTotal = totalSnap.val() || 0;
             let newTotal = currentTotal + points;
-            database.ref('scores/total').set(newTotal);
-
-            // עדכון התצוגה
+            database.ref('scores/total').set(newTotal).catch(handleFirebaseError);
             updateDisplay();
         });
+    }).finally(() => toggleSavingIndicator(false));
+}
+
+function submitPrizeSuggestion() {
+    const prizeInput = document.getElementById('prizeInput');
+    const suggestionText = prizeInput.value.trim();
+    const user = userSelect.value;
+
+    if (!suggestionText) {
+        alert('כתוב הצעה!');
+        return;
+    }
+
+    suggestionsRef.push({
+        text: suggestionText,
+        user: user,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+    });
+    prizeInput.value = '';
+}
+
+function displaySuggestions(suggestions) {
+    const list = document.getElementById('suggestionsList');
+    list.innerHTML = '';
+
+    suggestions.forEach(suggestion => {
+        const li = document.createElement('li');
+        const date = new Date(suggestion.timestamp);
+        li.innerHTML = `
+            <strong>${suggestion.text}</strong>
+            <small>הוצע ע"י ${suggestion.user} ב-${date.toLocaleString('he-IL')}</small>
+        `;
+        list.appendChild(li);
     });
 }
+
 
 function updateDisplay() {
     // ניקוד כללי
@@ -113,11 +141,29 @@ function updateDisplay() {
     });
 }
 
-// עדכון תצוגה בשינוי משתמש
+
+function toggleSavingIndicator(isSaving) {
+    const saveButton = document.querySelector('button[onclick="saveData()"]');
+    saveButton.textContent = isSaving ? 'שומר...' : 'שמור פעילות';
+    saveButton.classList.toggle('saving', isSaving);
+}
+
+function handleFirebaseError(error) {
+    console.error("שגיאת Firebase:", error);
+    alert('אירעה שגיאה. נסה שוב.');
+}
+
+// טעינת הצעות פרסים בזמן אמת
+suggestionsRef.orderByChild('timestamp').on('value', (snapshot) => {
+    const suggestions = [];
+    snapshot.forEach(childSnap => {
+        suggestions.push(childSnap.val());
+    });
+    suggestions.sort((a, b) => b.timestamp - a.timestamp);
+    displaySuggestions(suggestions);
+});
+
 userSelect.addEventListener('change', updateDisplay);
-
-// טעינת ניקוד בעת טעינת הדף
 updateDisplay();
-
-// זמינות הפונקציה לכפתור ב-HTML
 window.saveData = saveData;
+window.submitPrizeSuggestion = submitPrizeSuggestion;
