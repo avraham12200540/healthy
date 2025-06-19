@@ -1,7 +1,4 @@
-// הגדרת מערך המשתמשים
 const users = ['אבא', 'אמא', 'יאיר', 'רננה', 'איתן', 'הדר', 'דביר', 'מוריה', 'ראשית', 'שמשון', 'טליה', 'אברהם', 'אבישי', 'שוביה ציון', 'עדיה מאיר', 'נטע', 'אחר'];
-
-// הגדרת אובייקט הפעילויות ואפשרויותיהן עם ניקוד
 const activities = {
     'קמתי בבוקר לתפילה 🌞': {'5:45': 10, '6:30': 5, '7:00': 3, '8:00': 1},
     'צחצחתי שיניים 🪥': {'בוקר': 2, 'ערב': 2},
@@ -23,35 +20,21 @@ const activities = {
     'עזרתי בבית 🧹': {'5 דקות': 1, '10 דקות': 2, '20 דקות': 5}
 };
 
-// שליפת אלמנטים מה-DOM
-const userSelect = document.getElementById('userSelect'); // תיבת בחירת משתמש
-const activitySelect = document.getElementById('activitySelect'); // תיבת בחירת פעילות
-const optionSelect = document.getElementById('optionSelect'); // תיבת בחירת אפשרות פעילות
-const totalScoreDiv = document.getElementById('totalScore'); // הצגת ניקוד כולל
-const userScoreDiv = document.getElementById('userScore'); // הצגת ניקוד למשתמש נבחר
-const togetherCheckbox = document.getElementById('togetherCheckbox'); // צ'קבוקס לביצוע יחד
-const historyUserSelect = document.getElementById('historyUserSelect'); // תיבת בחירת משתמש להצגת היסטוריה
+const userSelect = document.getElementById('userSelect');
+const activitySelect = document.getElementById('activitySelect');
+const optionSelect = document.getElementById('optionSelect');
+const totalScoreDiv = document.getElementById('totalScore');
+const userScoreDiv = document.getElementById('userScore');
+const togetherCheckbox = document.getElementById('togetherCheckbox'); // חדש
 
-// הוספת אפשרות "הכל" להיסטוריית הפעילויות
-const allOption = document.createElement('option');
-allOption.value = 'all';
-allOption.textContent = 'הכל';
-historyUserSelect.appendChild(allOption);
-
-// מילוי תיבות הבחירה במשתמשים ובאפשרויות
+// מילוי dropdowns
 users.forEach(user => {
     const opt = document.createElement('option');
     opt.value = user;
     opt.textContent = user;
     userSelect.appendChild(opt);
-
-    const opt2 = document.createElement('option');
-    opt2.value = user;
-    opt2.textContent = user;
-    historyUserSelect.appendChild(opt2);
 });
 
-// מילוי תיבת הבחירה בפעילויות
 Object.keys(activities).forEach(activity => {
     const opt = document.createElement('option');
     opt.value = activity;
@@ -59,19 +42,15 @@ Object.keys(activities).forEach(activity => {
     activitySelect.appendChild(opt);
 });
 
-// ברירת מחדל להצגת אפשרויות לפעילות הראשונה
+// ברירת מחדל
 activitySelect.value = Object.keys(activities)[0];
-populateOptions(); // מילוי אפשרויות הפעולה בהתאם לבחירה
+populateOptions();
 
-// אירועים לשינוי בחירה בתיבה
-historyUserSelect.addEventListener('change', renderActivityHistory); // שינוי משתמש היסטוריה
-activitySelect.addEventListener('change', populateOptions); // שינוי פעילות
+activitySelect.addEventListener('change', populateOptions);
 
-// מילוי אפשרויות בהתאם לפעילות שנבחרה
 function populateOptions() {
-    optionSelect.innerHTML = ''; // ניקוי קודם
+    optionSelect.innerHTML = '';
     const options = activities[activitySelect.value];
-    if (!options) return;
     Object.keys(options).forEach(option => {
         const opt = document.createElement('option');
         opt.value = option;
@@ -80,128 +59,62 @@ function populateOptions() {
     });
 }
 
-// שמירת פעולה חדשה במסד הנתונים
 function saveData() {
     const user = userSelect.value;
     const activity = activitySelect.value;
     const option = optionSelect.value;
-    const didTogether = togetherCheckbox.checked;
+    const didTogether = togetherCheckbox.checked; // האם נבחר תיבה
 
-    // בדיקת תקינות
-    if (user === '' || activity === '' || option === '') {
+    if (!user || !activity || !option) {
         alert('בחר הכל!');
         return;
     }
 
-    let points = activities[activity][option]; // ניקוד בסיסי
+    let points = activities[activity][option];
+
+    // אם סומן שעשו ביחד - הכפלת ניקוד פי 1.5
     if (didTogether) {
-        points = Math.round(points * 1.5); // הכפלת ניקוד אם בוצע יחד
+        points = Math.round(points * 1.5); // עיגול לניקוד שלם
     }
 
-    const now = new Date(); // תאריך ושעה נוכחיים
-    const activityData = {
-        user,
-        name: activity,
-        option,
-        amount: points,
-        date: now.toLocaleDateString('he-IL'),
-        time: now.toLocaleTimeString('he-IL'),
-        withSomeone: didTogether
-    };
-
-    const newActivityKey = database.ref().child('activityHistory').push().key; // יצירת מפתח חדש בהיסטוריה
-    database.ref('activityHistory/' + newActivityKey).set(activityData) // שמירת הפעולה
-        .catch(err => console.error('שגיאה בהוספת היסטוריה:', err));
-
-    // עדכון ניקוד אישי וכללי
+    // קריאת ניקוד קיים
     database.ref('scores/' + user).once('value').then(snapshot => {
         let currentUserScore = snapshot.val() || 0;
         let newUserScore = currentUserScore + points;
-        database.ref('scores/' + user).set(newUserScore)
-            .catch(err => console.error('שגיאה בעדכון ניקוד משתמש:', err));
 
+        // שמירת ניקוד חדש
+        database.ref('scores/' + user).set(newUserScore);
+
+        // עדכון ניקוד כללי
         database.ref('scores/total').once('value').then(totalSnap => {
             let currentTotal = totalSnap.val() || 0;
             let newTotal = currentTotal + points;
-            database.ref('scores/total').set(newTotal)
-                .then(() => {
-                    updateDisplay(); // רענון הצגת ניקוד
-                    renderActivityHistory(); // רענון היסטוריה
-                })
-                .catch(err => console.error('שגיאה בעדכון ניקוד כולל:', err));
-        }).catch(err => console.error('שגיאה בקריאת ניקוד כולל:', err));
-    }).catch(err => console.error('שגיאה בקריאת ניקוד משתמש:', err));
+            database.ref('scores/total').set(newTotal);
+
+            // עדכון התצוגה
+            updateDisplay();
+        });
+    });
 }
 
-// הצגת ניקוד משתמש נבחר
-function setUserScoreDisplay(user) {
-    database.ref('scores/' + user).once('value')
-        .then(snapshot => {
-            userScoreDiv.textContent = user ? `${user} עשה: ${(snapshot.val() || 0)} נקודות` : '';
-        })
-        .catch(err => console.error('שגיאה בהצגת ניקוד משתמש:', err));
-}
-
-// הצגת ניקוד כללי
-function setTotalScoreDisplay() {
-    database.ref('scores/total').once('value')
-        .then(snapshot => {
-            totalScoreDiv.textContent = 'ניקוד כללי: ' + (snapshot.val() || 0);
-        })
-        .catch(err => console.error('שגיאה בהצגת ניקוד כולל:', err));
-}
-
-// רענון תצוגות הניקוד
 function updateDisplay() {
-    setTotalScoreDisplay();
-    setUserScoreDisplay(userSelect.value);
+    // ניקוד כללי
+    database.ref('scores/total').once('value').then(snapshot => {
+        totalScoreDiv.textContent = 'ניקוד כללי: ' + (snapshot.val() || 0);
+    });
+
+    // ניקוד של המשתמש הנבחר
+    const user = userSelect.value;
+    database.ref('scores/' + user).once('value').then(snapshot => {
+        userScoreDiv.textContent = user ? ${user} עשה: ${(snapshot.val() || 0)} נקודות : '';
+    });
 }
 
-// הצגת היסטוריית פעילויות בהתאם למשתמש שנבחר
-function renderActivityHistory() {
-    const historyContainer = document.getElementById('activity-history');
-    historyContainer.innerHTML = ''; // ניקוי קודם
+// עדכון תצוגה בשינוי משתמש
+userSelect.addEventListener('change', updateDisplay);
 
-    const selectedUser = historyUserSelect.value; // המשתמש שנבחר להיסטוריה
-
-    database.ref('activityHistory').once('value')
-        .then(snapshot => {
-            const historyData = snapshot.val();
-            if (!historyData) return;
-
-            const activitiesList = Object.values(historyData).filter(activity => {
-                return selectedUser === 'all' || activity.user === selectedUser;
-            });
-
-            // מיון לפי תאריך ושעה (מהחדש לישן)
-            activitiesList.sort((a, b) => {
-                const parseDate = str => {
-                    const [day, month, year] = str.split('/');
-                    return new Date(`${year}-${month}-${day}`);
-                };
-                const dateA = parseDate(a.date);
-                const dateB = parseDate(b.date);
-                return dateB - dateA || b.time.localeCompare(a.time);
-            });
-
-            // יצירת אלמנטים להצגה בדף
-            activitiesList.forEach(activity => {
-                const li = document.createElement('li');
-                li.className = 'bg-gray-100 p-2 rounded shadow mb-2';
-                li.innerHTML = `
-                    <p><strong>${activity.name} - ${activity.option}</strong> - ${activity.amount} נקודות</p>
-                    <p class="text-sm text-gray-600">${activity.date} בשעה ${activity.time} - משתמש: ${activity.user}</p>
-                    ${activity.withSomeone ? '<p class="text-sm text-blue-600">בוצע עם מישהו נוסף</p>' : ''}
-                `;
-                historyContainer.appendChild(li);
-            });
-        })
-        .catch(err => console.error('שגיאה בקריאת היסטוריה:', err));
-}
-
-// רענון ראשוני של ניקוד והיסטוריה בעת טעינת הדף
+// טעינת ניקוד בעת טעינת הדף
 updateDisplay();
-renderActivityHistory();
 
-// חשיפת פונקציית saveData לגלובל (לשימוש מהכפתור)
+// זמינות הפונקציה לכפתור ב-HTML
 window.saveData = saveData;
