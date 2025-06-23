@@ -1,11 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Varela+Round&family=Rubik:wght@500&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans+Hebrew&display=swap');
 
-html {
-  font-size: 67%;
-}
-
-
 h1.main-title {
   font-size: 2rem;  /* גדול מאוד */
   text-align: center;
@@ -383,6 +378,9 @@ body.dark-mode h1 {
     background: rgba(161, 196, 253, 0.5);
 }
 
+html {
+  font-size: 67%;
+}
 
 .saving {
     animation: savingPulse 1s infinite;
