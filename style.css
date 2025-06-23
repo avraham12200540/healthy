@@ -2,13 +2,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans+Hebrew&display=swap');
 
 #sidebar-left {
-  position: fixed;
   transform: scale(0.8);
   transform-origin: top left;
   /* עיצוב נוסף */
 }
 #sidebar-right {
-  position: fixed;
   transform: scale(0.8);
   transform-origin: top right;
   /* עיצוב נוסף */
