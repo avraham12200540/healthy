@@ -22,6 +22,39 @@ const activities = {
     'עזרתי בבית 🧹': {'5 דקות': 1, '10 דקות': 2, '20 דקות': 5}
 };
 
+// הגדרת קטגוריות הפעילויות
+const activityCategories = {
+    'פעילויות רוחניות ובריאות יומית': [
+        'קמתי בבוקר לתפילה 🌞', 'צחצחתי שיניים 🦷', 'למדתי תורה 📖', 
+        'הלכתי לישון 😴', 'שתיתי מים 🚰'
+    ],
+    'פעילות גופנית': [
+        'מתח ברצף 💪', 'שכיבות סמיכה ברצף 💪', 'כפיפות בטן 💪', 
+        'רכבתי על אופניים 🚴', 'הלכתי 🚶‍♂️', 'רצתי 🏃‍♂️', 
+        'שחיתי בבריכה 🏊', 'שיחקתי בכדור 🏀'
+    ],
+    'תזונה בריאה': [
+        'אכלתי פרי 🍇', 'אכלתי ירק 🥕'
+    ],
+    'פעילויות משפחתיות ובית': [
+        'הכנתי סלט למשפחה 🥗', 'השתתפתי בארוחה משפחתית 👨‍👩‍👧‍👦', 
+        'הכנתי ארוחה מבושלת למשפחה 🍲', 'עזרתי בבית 🧹'
+    ],
+    'לימודים ופיתוח אישי': [
+        'עבודות חופש 📚'
+    ]
+};
+
+// מפה הפוכה - מפעילות לקטגוריה
+const activityToCategory = {};
+Object.keys(activityCategories).forEach(category => {
+    activityCategories[category].forEach(activity => {
+        activityToCategory[activity] = category;
+    });
+});
+
+
+
 const userSelect = document.getElementById('userSelect');
 const activitySelect = document.getElementById('activitySelect');
 const optionSelect = document.getElementById('optionSelect');
@@ -68,7 +101,7 @@ function saveData() {
     const user = userSelect.value;
     const activity = activitySelect.value;
     const option = optionSelect.value;
-    const didTogether = togetherCheckbox.checked; // האם נבחר תיבה
+    const didTogether = togetherCheckbox.checked;
 
     if (!user || !activity || !option) {
         alert('בחר הכל!');
@@ -80,17 +113,31 @@ function saveData() {
 
     toggleSavingIndicator(true);
 
+    // עדכון ניקוד המשתמש
     database.ref('scores/' + user).once('value').then(snapshot => {
         let currentUserScore = snapshot.val() || 0;
         let newUserScore = currentUserScore + points;
-
         database.ref('scores/' + user).set(newUserScore).catch(handleFirebaseError);
         
+        // עדכון הניקוד הכללי
         database.ref('scores/total').once('value').then(totalSnap => {
             let currentTotal = totalSnap.val() || 0;
             let newTotal = currentTotal + points;
             database.ref('scores/total').set(newTotal).catch(handleFirebaseError);
-            updateDisplay();
+            
+            // עדכון ניקוד הקטגוריה
+            const category = activityToCategory[activity];
+            if (category) {
+                database.ref('categoryScores/' + category).once('value').then(categorySnap => {
+                    let currentCategoryScore = categorySnap.val() || 0;
+                    let newCategoryScore = currentCategoryScore + points;
+                    database.ref('categoryScores/' + category).set(newCategoryScore).catch(handleFirebaseError);
+                    updateDisplay();
+                    updateCategoryDisplay();
+                });
+            } else {
+                updateDisplay();
+            }
         });
     }).finally(() => toggleSavingIndicator(false));
 }
@@ -153,6 +200,21 @@ function handleFirebaseError(error) {
     console.error("שגיאת Firebase:", error);
     alert('אירעה שגיאה. נסה שוב.');
 }
+
+// פונקציה לעדכון תצוגת ניקוד הקטגוריות
+function updateCategoryDisplay() {
+    Object.keys(activityCategories).forEach(category => {
+        database.ref('categoryScores/' + category).once('value').then(snapshot => {
+            const score = snapshot.val() || 0;
+            const categoryElement = document.getElementById('category-' + category.replace(/\s+/g, '-'));
+            if (categoryElement) {
+                categoryElement.textContent = `${category}: ${score} נקודות`;
+            }
+        });
+    });
+}
+
+
 
 // טעינת הצעות פרסים בזמן אמת
 suggestionsRef.orderByChild('timestamp').on('value', (snapshot) => {
