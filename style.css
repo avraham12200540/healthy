@@ -6,7 +6,6 @@
   top: 0;
   left: 0;
   width: 250px;
-  height: 100vh;
   transform: scale(0.8);
   transform-origin: top left;
   /* עיצוב נוסף */
@@ -16,7 +15,6 @@
   top: 0;
   right: 0;
   width: 250px;
-  height: 100vh;
   transform: scale(0.8);
   transform-origin: top right;
   /* עיצוב נוסף */
