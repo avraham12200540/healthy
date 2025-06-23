@@ -7,6 +7,18 @@
   margin-top: 0; /* או כמה פיקסלים שתרצה */
 }
 
+#main-scale-sidebar-left {
+  transform: scale(0.80);
+  transform-origin: top left; /* או top left */
+  margin-top: 0; /* או כמה פיקסלים שתרצה */
+}
+
+#main-scale-sidebar-right {
+  transform: scale(0.80);
+  transform-origin: top right; /* או top left */
+  margin-top: 0; /* או כמה פיקסלים שתרצה */
+}
+
 h1.main-title {
   font-size: 2rem;  /* גדול מאוד */
   text-align: center;
