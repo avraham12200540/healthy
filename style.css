@@ -378,9 +378,6 @@ body.dark-mode h1 {
     background: rgba(161, 196, 253, 0.5);
 }
 
-html {
-  font-size: 67%;
-}
 
 .saving {
     animation: savingPulse 1s infinite;
