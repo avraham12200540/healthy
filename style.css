@@ -7,17 +7,28 @@
   margin-top: 0; /* או כמה פיקסלים שתרצה */
 }
 
-#main-scale-sidebar-left {
-  transform: scale(0.80);
-  transform-origin: top left; /* או top left */
-  margin-top: 0; /* או כמה פיקסלים שתרצה */
+#sidebar-left {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100vh;
+  background: ...;
+  transform: scale(0.8);
+  transform-origin: top left;
 }
 
-#main-scale-sidebar-right {
-  transform: scale(0.80);
-  transform-origin: top right; /* או top left */
-  margin-top: 0; /* או כמה פיקסלים שתרצה */
+#sidebar-right {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 250px;
+  height: 100vh;
+  background: ...;
+  transform: scale(0.8);
+  transform-origin: top right;
 }
+
 
 h1.main-title {
   font-size: 2rem;  /* גדול מאוד */
