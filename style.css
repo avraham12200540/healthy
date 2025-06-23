@@ -7,14 +7,6 @@
   margin-bottom: 0;
   padding-bottom: 0;
 }
-body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  min-height: 100vh;
-}
-
 
 h1.main-title {
   font-size: 2rem;  /* גדול מאוד */
@@ -25,19 +17,19 @@ h1.main-title {
 
 }
 
-
 body {
     font-family: 'Varela Round', sans-serif;
     direction: rtl;
     background: 
         linear-gradient(rgba(161, 196, 253, 0.7), rgba(194, 233, 251, 0.7)),
         url('1.png') center/cover no-repeat;
-    padding: 50px;
+    padding: 0; /* במקום 50px */
     text-align: center;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    align-items: center;
+    justify-content: flex-start; /* לא center */
     color: #333;
     font-size: 26px;
     overflow-x: hidden;
