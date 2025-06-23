@@ -3,18 +3,12 @@
 
 #sidebar-left {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 250px;
   transform: scale(0.8);
   transform-origin: top left;
   /* עיצוב נוסף */
 }
 #sidebar-right {
   position: fixed;
-  top: 0;
-  right: 0;
-  width: 250px;
   transform: scale(0.8);
   transform-origin: top right;
   /* עיצוב נוסף */
