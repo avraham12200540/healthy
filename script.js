@@ -208,7 +208,7 @@ function handleFirebaseError(error) {
 // פונקציה לעדכון תצוגת ניקוד הקטגוריות
 function updateCategoryDisplay() {
     Object.keys(activityCategories).forEach(category => {
-        database.ref('categoryScores/' + category).once('value').then(snapshot => {
+        database.ref('categoryScores/' + category).on('value', snapshot => {
             const score = snapshot.val() || 0;
             const categoryElement = document.getElementById('category-' + category.replace(/\s+/g, '-'));
             if (categoryElement) {
@@ -217,6 +217,7 @@ function updateCategoryDisplay() {
         });
     });
 }
+
 
 
 
