@@ -3,6 +3,8 @@
 
 #main-scale {
   transform: scale(0.67);
+  transform-origin: top right; /* או top left */
+  margin-top: 0; /* או כמה פיקסלים שתרצה */
 }
 
 
