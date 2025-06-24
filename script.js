@@ -25,7 +25,7 @@ const activities = {
 
 // הגדרת קטגוריות הפעילויות
 const activityCategories = {
-    'בריאות יומית': [
+    'בריאות יומית (קימה, צחצוח, שינה)': [
         'קמתי בבוקר לתפילה 🌞', 'צחצחתי שיניים 🦷', 
         'הלכתי לישון 😴'
     ],
