@@ -16,14 +16,14 @@
 <!-- הודעת הפעלה -->
 <div id="music-hint" style="
   position:fixed;
-  top:60px;
-  left:54px;
-  background:rgba(255,255,255,0.97);
+  top:24px;
+  left:60px;
+  background:rgba(255,255,255,0.95);
   color:#333;
-  padding:10px 18px 10px 10px;
+  padding:12px 18px 12px 12px;
   border-radius:30px;
   box-shadow:0 2px 12px rgba(0,0,0,0.12);
-  font-size:1.05em;
+  font-size:1.1em;
   font-family:inherit;
   z-index:10001;
   display:flex;
@@ -34,16 +34,12 @@
   pointer-events:none;
   transition:opacity 0.7s;
 ">
-  <!-- חץ מתעקל למעלה -->
-  <svg id="hint-arrow" width="40" height="40" viewBox="0 0 40 40">
-    <path d="M36,36 Q32,8 10,14" stroke="#333" stroke-width="3" fill="none" marker-end="url(#arrowhead)" />
-    <defs>
-      <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="2" refY="4" orient="auto" markerUnits="strokeWidth">
-        <polygon points="0 0, 8 4, 0 8" fill="#333"/>
-      </marker>
-    </defs>
+  <svg id="hint-arrow" width="28" height="28" viewBox="0 0 32 32">
+    <!-- חץ שמאלה -->
+    <polyline points="28,16 2,16" stroke="#333" stroke-width="3" fill="none" />
+    <polyline points="10,8 2,16 10,24" stroke="#333" stroke-width="3" fill="none" />
   </svg>
-  <span>להפעלת המוזיקה לחץ פעמיים על האייקון</span>
+  <span>להפעלת המוזיקה לחץ כאן</span>
 </div>
 
 <!-- האייקון בצד שמאל למעלה -->
@@ -74,7 +70,14 @@
     hint.style.pointerEvents = 'none';
   }, 3400);
 
-  // הפעלת המוזיקה בלחיצה כפולה על האייקון
+  // הפעלת המוזיקה בלחיצה על ההודעה
+  hint.addEventListener('click', () => {
+    document.getElementById('bg-music').play();
+    hint.style.opacity = 0;
+    hint.style.pointerEvents = 'none';
+  });
+
+  // הפעלת המוזיקה גם בלחיצה על האייקון
   const audio = document.getElementById('bg-music');
   audio.volume = 0.2;
 
@@ -82,18 +85,9 @@
   const iconMuted = document.getElementById('icon-muted');
   const iconUnmuted = document.getElementById('icon-unmuted');
 
-  muteBtn.addEventListener('dblclick', function(event) {
-    event.stopPropagation();
-    if (audio.paused) audio.play();
-    audio.muted = false;
-    iconMuted.style.display = 'none';
-    iconUnmuted.style.display = 'block';
-    hint.style.opacity = 0;
-    hint.style.pointerEvents = 'none';
-  });
-
   muteBtn.addEventListener('click', function(event) {
     event.stopPropagation();
+    if (audio.paused) audio.play();
     audio.muted = !audio.muted;
     iconMuted.style.display = audio.muted ? 'block' : 'none';
     iconUnmuted.style.display = audio.muted ? 'none' : 'block';
