@@ -301,6 +301,73 @@
   <a href="https://github.com/avraham12200540/healthy" target="_blank" style="color: #333; text-decoration: underline;">לחצו כאן</a>
 </footer>
 
+<!-- אייקון עזרה -->
+<button id="help-icon" title="עזרה" aria-label="עזרה" tabindex="0">?</button>
+
+<div id="help-popup">
+  <h2>מבצע הבריאות של משפחת גלסר</h2>
+  <p>אם האתר לא מעלה לכם נתונים (ניקוד הצעות לפרסים וכו') - בדקו שהגנת סינון תכנים אינה חוסמת את האתר או אינה פעילה.</p>
+  <p>כדי להפעיל את המוזיקה באתר יש ללחוץ על אייקון השמע בצד ימין למעלה.</p>
+  <p>לכל בעיה, שיפור, או רעיון שעולה לכם לראש - אתם מוזמנים לפנות אלי:<br>אברהם גלסר 055-9962656</p>
+  <button onclick="document.getElementById('help-popup').style.display='none'">סגור</button>
+</div>
+
+<style>
+  #help-icon {
+    position: fixed;
+    left: 10px;
+    bottom: 10px;
+    width: 30px;
+    height: 30px;
+    background-color: #007BFF;
+    color: white;
+    font-weight: bold;
+    font-size: 24px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 30px;
+    cursor: pointer;
+    z-index: 1000;
+    border: none;
+  }
+  #help-popup {
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    background-color: white;
+    border: 2px solid #007BFF;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    z-index: 1001;
+    direction: rtl;
+    text-align: right;
+  }
+  #help-popup h2 {
+    margin-top: 0;
+    color: #007BFF;
+  }
+  #help-popup button {
+    margin-top: 15px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  document.getElementById('help-icon').onclick = function() {
+    var popup = document.getElementById('help-popup');
+    popup.style.display = (popup.style.display === 'block') ? 'none' : 'block';
+  };
+</script>
+
 
 </body>
 </html>
