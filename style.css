@@ -307,25 +307,27 @@ body.dark-mode h1 {
 /* סיידבר ימני להצעות */
 .suggestions-sidebar {
     position: fixed;
-    right: 0; /* במקום left */
+    right: 0;
     top: 150px;
     bottom: 22px;
     width: 250px;
-    background: linear-gradient(135deg, #a1c4fd, #c2e9fb); /* כמו השמאלי */
-    box-shadow: -2px 0 10px rgba(0,0,0,0.2); /* הצל מהצד השני */
+    background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+    box-shadow: -2px 0 10px rgba(0,0,0,0.2);
     padding: 20px;
     box-sizing: border-box;
     color: #333;
     font-size: 18px;
-    text-align: right;
-    border-top-left-radius: 20px; /* שינה צדדים */
+    text-align: right; /* עדיין מיושר לימין טקסטואלית */
+    direction: ltr; /* זה מזיז את הסקרול פנימה */
+    border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
-    transform: cale(0.8);
-    transform-origin: top right; /* צד ימין במקום שמאל */
+    transform: scale(0.8);
+    transform-origin: top right;
     overflow-y: auto;
     min-height: 1000px;
     max-height: 1000px;
 }
+
 
 .suggestions-sidebar h2 {
     margin-top: 0;
