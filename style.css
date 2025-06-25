@@ -320,10 +320,11 @@ body.dark-mode h1 {
     text-align: right;
     border-top-left-radius: 20px; /* שינה צדדים */
     border-bottom-left-radius: 20px;
-    transform: scale(0.8);
+    transform: cale(0.8);
     transform-origin: top right; /* צד ימין במקום שמאל */
     overflow-y: auto;
     min-height: 1000px;
+    max-height: 1000px;
 }
 
 .suggestions-sidebar h2 {
