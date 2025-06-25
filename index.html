@@ -12,8 +12,6 @@
 </head>
 <body>
 
-document.addEventListener('DOMContentLoaded', function() {
-    
 <audio id="bg-music" src="music.mp3" loop></audio>
 
 <div id="mute-btn" style="position:fixed;top:16px;left:16px;width:28px;height:28px;z-index:9999;cursor:pointer;opacity:0.7;background:none;border:none;padding:0;">
@@ -26,41 +24,6 @@ document.addEventListener('DOMContentLoaded', function() {
     <path fill="gray" d="M3 9v6h4l5 5V4L7 9H3z"/>
   </svg>
 </div>
-
-<script>
-  const audio = document.getElementById('bg-music');
-  audio.volume = 0.4;
-  let audioStarted = false;
-
-  function startAudioOnce() {
-    if (!audioStarted) {
-      audio.play();
-      audioStarted = true;
-      document.removeEventListener('click', startAudioOnce);
-      document.removeEventListener('scroll', startAudioOnce);
-      document.removeEventListener('keydown', startAudioOnce);
-    }
-  }
-
-  document.addEventListener('click', startAudioOnce);
-  document.addEventListener('scroll', startAudioOnce);
-  document.addEventListener('keydown', startAudioOnce);
-
-  const muteBtn = document.getElementById('mute-btn');
-  const iconMuted = document.getElementById('icon-muted');
-  const iconUnmuted = document.getElementById('icon-unmuted');
-
-  muteBtn.addEventListener('click', function(event) {
-    event.stopPropagation();
-    audio.muted = !audio.muted;
-    iconMuted.style.display = audio.muted ? 'block' : 'none';
-    iconUnmuted.style.display = audio.muted ? 'none' : 'block';
-  });
-</script>
-
-
-
-});
 
     
     
@@ -229,7 +192,39 @@ document.addEventListener('DOMContentLoaded', function() {
       // אתחול Firebase
       firebase.initializeApp(firebaseConfig);
       const database = firebase.database();
+        
     </script>
+
+    <script>
+  const audio = document.getElementById('bg-music');
+  audio.volume = 0.4;
+  let audioStarted = false;
+
+  function startAudioOnce() {
+    if (!audioStarted) {
+      audio.play();
+      audioStarted = true;
+      document.removeEventListener('click', startAudioOnce);
+      document.removeEventListener('scroll', startAudioOnce);
+      document.removeEventListener('keydown', startAudioOnce);
+    }
+  }
+
+  document.addEventListener('click', startAudioOnce);
+  document.addEventListener('scroll', startAudioOnce);
+  document.addEventListener('keydown', startAudioOnce);
+
+  const muteBtn = document.getElementById('mute-btn');
+  const iconMuted = document.getElementById('icon-muted');
+  const iconUnmuted = document.getElementById('icon-unmuted');
+
+  muteBtn.addEventListener('click', function(event) {
+    event.stopPropagation();
+    audio.muted = !audio.muted;
+    iconMuted.style.display = audio.muted ? 'block' : 'none';
+    iconUnmuted.style.display = audio.muted ? 'none' : 'block';
+  });
+</script>
 
     <!-- קובץ הסקריפט שלך אחרי ה-Firebase -->
     <script src="script.js"></script>
