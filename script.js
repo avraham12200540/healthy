@@ -110,6 +110,15 @@ function saveData() {
         alert('בחר הכל!');
         return;
     }
+
+// שמירת הפעילות תחת userActivities
+const activityRecord = {
+    activity: activity,
+    option: option,
+    timestamp: Date.now()
+};
+database.ref('userActivities/' + user).push(activityRecord);
+
     
     let points = activities[activity][option];
     if (didTogether) points = Math.round(points * 1.5);
@@ -208,7 +217,6 @@ function handleFirebaseError(error) {
     alert('אירעה שגיאה. נסה שוב.');
 }
 
-// פונקציה לעדכון תצוגת ניקוד הקטגוריות
 function updateCategoryDisplay() {
     Object.keys(activityCategories).forEach(category => {
         database.ref('categoryScores/' + category).on('value', snapshot => {
@@ -217,10 +225,52 @@ function updateCategoryDisplay() {
             if (categoryElement) {
                 categoryElement.textContent = `${category}: ${score} נקודות`;
             }
+            // קריאה לעדכון שמות המשתמשים
+            updateCategoryUsers();
         });
     });
 }
 
+
+function updateCategoryUsers() {
+    const categoryUsers = {};
+    // אתחול לכל קטגוריה
+    Object.keys(activityCategories).forEach(category => {
+        categoryUsers[category] = new Set();
+    });
+
+    // שליפת כל הפעילויות מה־Firebase
+    database.ref('userActivities').once('value').then(snapshot => {
+        snapshot.forEach(userSnap => {
+            const user = userSnap.key;
+            userSnap.forEach(activitySnap => {
+                const activity = activitySnap.val().activity;
+                const category = activityToCategory[activity];
+                if (category) {
+                    categoryUsers[category].add(user);
+                }
+            });
+        });
+
+        // עדכון ה־DOM
+        Object.keys(categoryUsers).forEach(category => {
+            const usersArray = Array.from(categoryUsers[category]);
+            const categoryDiv = document.getElementById('category-' + category.replace(/\s+/g, '-'));
+            if (categoryDiv) {
+                let usersText = usersArray.length > 0 ? 'בוצע על ידי: ' + usersArray.join(', ') : 'לא בוצע עדיין';
+                let usersSpan = categoryDiv.querySelector('.category-users');
+                if (!usersSpan) {
+                    usersSpan = document.createElement('div');
+                    usersSpan.className = 'category-users handwriting';
+                    usersSpan.style.fontSize = '12px';
+                    usersSpan.style.marginTop = '5px';
+                    categoryDiv.appendChild(usersSpan);
+                }
+                usersSpan.textContent = usersText;
+            }
+        });
+    });
+}
 
 
 
