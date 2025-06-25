@@ -16,29 +16,30 @@
 <!-- הודעת הפעלה -->
 <div id="music-hint" style="
   position:fixed;
-  top:40px;
-  left:50%;
-  transform:translateX(-50%);
+  top:24px;
+  left:60px;
   background:rgba(255,255,255,0.95);
   color:#333;
-  padding:18px 30px 18px 60px;
+  padding:12px 18px 12px 12px;
   border-radius:30px;
   box-shadow:0 2px 12px rgba(0,0,0,0.12);
-  font-size:1.3em;
+  font-size:1.1em;
   font-family:inherit;
   z-index:10001;
   display:flex;
   align-items:center;
-  gap:18px;
+  gap:10px;
+  flex-direction: row-reverse;
   opacity:0;
   pointer-events:none;
   transition:opacity 0.7s;
 ">
-  <span>להפעלת המוזיקה לחץ כאן</span>
-  <svg id="hint-arrow" width="32" height="32" viewBox="0 0 32 32">
-    <polyline points="2,16 28,16" stroke="#333" stroke-width="3" fill="none" />
-    <polyline points="20,8 28,16 20,24" stroke="#333" stroke-width="3" fill="none" />
+  <svg id="hint-arrow" width="28" height="28" viewBox="0 0 32 32">
+    <!-- חץ שמאלה -->
+    <polyline points="28,16 2,16" stroke="#333" stroke-width="3" fill="none" />
+    <polyline points="10,8 2,16 10,24" stroke="#333" stroke-width="3" fill="none" />
   </svg>
+  <span>להפעלת המוזיקה לחץ כאן</span>
 </div>
 
 <!-- האייקון בצד שמאל למעלה -->
@@ -61,7 +62,7 @@
   setTimeout(() => {
     hint.style.opacity = 1;
     hint.style.pointerEvents = 'auto';
-  }, 400); // הופעה חלקה אחרי טעינה
+  }, 400);
 
   // הסתרה אוטומטית אחרי 3 שניות
   setTimeout(() => {
@@ -78,7 +79,7 @@
 
   // הפעלת המוזיקה גם בלחיצה על האייקון
   const audio = document.getElementById('bg-music');
-  audio.volume = 0.3;
+  audio.volume = 0.2;
 
   const muteBtn = document.getElementById('mute-btn');
   const iconMuted = document.getElementById('icon-muted');
@@ -92,6 +93,7 @@
     iconUnmuted.style.display = audio.muted ? 'none' : 'block';
   });
 </script>
+
 
     
     
