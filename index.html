@@ -312,39 +312,70 @@
   <button onclick="document.getElementById('help-popup').style.display='none'">סגור</button>
 </div>
 
+<!-- אייקון עזרה -->
+<button id="help-icon" title="עזרה" aria-label="עזרה" tabindex="0">?</button>
+
+<!-- שכבת כהות + חלונית עזרה -->
+<div id="help-overlay">
+  <div id="help-popup">
+    <h2>מבצע הבריאות של משפחת גלסר</h2>
+    <p>אם האתר לא מעלה לכם נתונים (ניקוד הצעות לפרסים וכו') - בדקו שהגנת סינון תכנים אינה חוסמת את האתר או אינה פעילה.</p>
+    <p>כדי להפעיל את המוזיקה באתר יש ללחוץ על אייקון השמע בצד ימין למעלה.</p>
+    <p>לכל בעיה, שיפור, או רעיון שעולה לכם לראש - אתם מוזמנים לפנות אלי:<br>אברהם גלסר 055-9962656</p>
+    <button id="close-help">סגור</button>
+  </div>
+</div>
+
 <style>
   #help-icon {
     position: fixed;
-    left: 10px;
-    bottom: 10px;
-    width: 30px;
-    height: 30px;
+    left: 20px;
+    bottom: 20px;
+    width: 48px;
+    height: 48px;
     background-color: #007BFF;
     color: white;
     font-weight: bold;
-    font-size: 24px;
+    font-size: 32px;
     border-radius: 50%;
-    text-align: center;
-    line-height: 30px;
-    cursor: pointer;
-    z-index: 1000;
     border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+    cursor: pointer;
+    z-index: 1002;
+    transition: box-shadow 0.2s;
+    outline: none;
   }
-  #help-popup {
+  #help-icon:focus {
+    box-shadow: 0 0 0 3px #80bdff;
+  }
+
+  #help-overlay {
     display: none;
     position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 300px;
-    background-color: white;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 1001;
+    align-items: center;
+    justify-content: center;
+  }
+  #help-overlay.active {
+    display: flex;
+  }
+  #help-popup {
+    background: white;
     border: 2px solid #007BFF;
     border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
-    z-index: 1001;
+    padding: 24px 20px 16px 20px;
+    box-shadow: 0 0 16px rgba(0,0,0,0.5);
+    max-width: 340px;
+    width: 90vw;
     direction: rtl;
     text-align: right;
+    position: relative;
+    z-index: 1002;
   }
   #help-popup h2 {
     margin-top: 0;
@@ -355,18 +386,36 @@
     background-color: #007BFF;
     color: white;
     border: none;
-    padding: 8px 12px;
+    padding: 8px 16px;
     border-radius: 5px;
     cursor: pointer;
+    font-size: 16px;
   }
 </style>
 
 <script>
+  // פותח את החלונית
   document.getElementById('help-icon').onclick = function() {
-    var popup = document.getElementById('help-popup');
-    popup.style.display = (popup.style.display === 'block') ? 'none' : 'block';
+    document.getElementById('help-overlay').classList.add('active');
   };
+  // סוגר את החלונית
+  document.getElementById('close-help').onclick = function() {
+    document.getElementById('help-overlay').classList.remove('active');
+  };
+  // סגירה בלחיצה על הרקע הכהה
+  document.getElementById('help-overlay').onclick = function(e) {
+    if (e.target === this) {
+      this.classList.remove('active');
+    }
+  };
+  // סגירה ב-Esc
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.getElementById('help-overlay').classList.remove('active');
+    }
+  });
 </script>
+
 
 
 </body>
