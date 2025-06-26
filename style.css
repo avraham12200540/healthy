@@ -373,6 +373,52 @@ body.dark-mode h1 {
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
+
+
+.recent-activities-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 300px;
+  min-height: 200px;
+  background: #f7fafd;
+  padding: 20px 18px 20px 10px;
+  box-shadow: 2px 0 8px #0001;
+  border-top-right-radius: 16px;
+  border-bottom-right-radius: 16px;
+  z-index: 1000;
+  direction: rtl;
+}
+
+.recent-activities-title {
+  margin-bottom: 12px;
+  font-size: 1.1em;
+  color: #2563eb;
+  letter-spacing: 0.5px;
+}
+
+.recent-activities-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recent-activities-list li {
+  background: #e0e7ef;
+  margin-bottom: 8px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 1em;
+  color: #222;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 1px 2px #0001;
+  direction: rtl;
+}
+
+
+
 .category-display h3 {
     color: #333;
     margin-bottom: 15px;
