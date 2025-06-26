@@ -174,8 +174,7 @@ function submitPrizeSuggestion() {
 }
 
 
-
-// פונקציה לפורמט זמן רגיל
+// פונקציה לפורמט תאריך
 function formatTimestamp(timestamp) {
   const date = new Date(timestamp);
   return date.toLocaleString('he-IL', {
@@ -187,7 +186,7 @@ function formatTimestamp(timestamp) {
   });
 }
 
-// פונקציה לפורמט "לפני X זמן"
+// פונקציה להצגת "לפני X זמן"
 function timeAgo(timestamp) {
   const now = Date.now();
   const diffMs = now - timestamp;
@@ -201,22 +200,25 @@ function timeAgo(timestamp) {
   return `לפני ${diffDay} ימים`;
 }
 
-// שליפת 5 הפעילויות האחרונות מה-RTDB
+// שליפת 5 הפעילויות האחרונות מכל המשתמשים
 function fetchLastFiveActivities() {
-  return database.ref('activities')
-    .orderByChild('timestamp')
-    .limitToLast(5)
+  return database.ref('userActivities')
     .once('value')
     .then(snapshot => {
       const activities = [];
-      snapshot.forEach(childSnapshot => {
-        activities.push(childSnapshot.val());
+      snapshot.forEach(userSnap => {
+        userSnap.forEach(activitySnap => {
+          const activity = activitySnap.val();
+          activity.user = userSnap.key;
+          activities.push(activity);
+        });
       });
       activities.sort((a, b) => b.timestamp - a.timestamp);
-      return activities;
+      return activities.slice(0, 5);
     });
 }
 
+// הצגת הפעילויות
 function renderActivities(activities) {
   const activitiesList = document.getElementById('recent-activities');
   activitiesList.innerHTML = '';
@@ -225,14 +227,16 @@ function renderActivities(activities) {
     const timeStr = activity.timestamp
       ? `${formatTimestamp(activity.timestamp)} | ${timeAgo(activity.timestamp)}`
       : '';
-    li.textContent = (activity.title || activity.description || "פעילות ללא שם") + (timeStr ? ` (${timeStr})` : '');
+    li.textContent = `[${activity.user}] ${activity.activity || activity.option || "פעילות ללא שם"}${timeStr ? ` (${timeStr})` : ''}`;
     activitiesList.appendChild(li);
   });
 }
 
+// קריאה ראשונית להצגת הפעילויות כשנטען הדף
 document.addEventListener('DOMContentLoaded', () => {
   fetchLastFiveActivities().then(renderActivities);
 });
+
 
 
 
