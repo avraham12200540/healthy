@@ -173,6 +173,69 @@ function submitPrizeSuggestion() {
     prizeInput.value = '';
 }
 
+
+
+// פונקציה לפורמט זמן רגיל
+function formatTimestamp(timestamp) {
+  const date = new Date(timestamp);
+  return date.toLocaleString('he-IL', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+}
+
+// פונקציה לפורמט "לפני X זמן"
+function timeAgo(timestamp) {
+  const now = Date.now();
+  const diffMs = now - timestamp;
+  const diffSec = Math.floor(diffMs / 1000);
+  if (diffSec < 60) return 'לפני פחות מדקה';
+  const diffMin = Math.floor(diffSec / 60);
+  if (diffMin < 60) return `לפני ${diffMin} דקות`;
+  const diffHour = Math.floor(diffMin / 60);
+  if (diffHour < 24) return `לפני ${diffHour} שעות`;
+  const diffDay = Math.floor(diffHour / 24);
+  return `לפני ${diffDay} ימים`;
+}
+
+// שליפת 5 הפעילויות האחרונות מה-RTDB
+function fetchLastFiveActivities() {
+  return database.ref('activities')
+    .orderByChild('timestamp')
+    .limitToLast(5)
+    .once('value')
+    .then(snapshot => {
+      const activities = [];
+      snapshot.forEach(childSnapshot => {
+        activities.push(childSnapshot.val());
+      });
+      activities.sort((a, b) => b.timestamp - a.timestamp);
+      return activities;
+    });
+}
+
+function renderActivities(activities) {
+  const activitiesList = document.getElementById('recent-activities');
+  activitiesList.innerHTML = '';
+  activities.forEach(activity => {
+    const li = document.createElement('li');
+    const timeStr = activity.timestamp
+      ? `${formatTimestamp(activity.timestamp)} | ${timeAgo(activity.timestamp)}`
+      : '';
+    li.textContent = (activity.title || activity.description || "פעילות ללא שם") + (timeStr ? ` (${timeStr})` : '');
+    activitiesList.appendChild(li);
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  fetchLastFiveActivities().then(renderActivities);
+});
+
+
+
 function displaySuggestions(suggestions) {
     const list = document.getElementById('suggestionsList');
     list.innerHTML = '';
